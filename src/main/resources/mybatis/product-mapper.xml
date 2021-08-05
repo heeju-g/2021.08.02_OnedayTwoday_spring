@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="product">
+
+	<select id="selectList" resultType="productDto">
+		SELECT PRODUCT_NO, PRODUCT_NAME, PRODUCT_CATEGORY, PRODUCT_PRICE, PRODUCT_DESC, PRODUCT_LOC,
+		PRODUCT_DEL, PRODUCT_SALE
+		FROM PRODUCT 
+		ORDER BY PRODUCT_NO
+	</select>
+
+	<select id="selectListPaging" parameterType="storePagingDto" resultType="productDto">
+		SELECT X.rnum,
+		X.PRODUCT_NO, X.PRODUCT_NAME,  X.PRODUCT_CATEGORY, X.PRODUCT_PRICE, X.PRODUCT_DESC, X.PRODUCT_LOC,
+		X.PRODUCT_DEL, X.PRODUCT_SALE, X.FILE_NEW_NAME
+		FROM (
+			SELECT anum AS rnum,
+			A.PRODUCT_NO, A.PRODUCT_NAME, A.PRODUCT_CATEGORY, A.PRODUCT_PRICE, A.PRODUCT_DESC, A.PRODUCT_LOC,
+			A.PRODUCT_DEL, A.PRODUCT_SALE, A.FILE_NEW_NAME
+			FROM (
+				SELECT ROWNUM as anum,
+				B.PRODUCT_NO, B.PRODUCT_NAME, B.PRODUCT_CATEGORY, B.PRODUCT_PRICE, B.PRODUCT_DESC, B.PRODUCT_LOC,
+				B.PRODUCT_DEL, B.PRODUCT_SALE, B.FILE_NEW_NAME
+				FROM (
+					SELECT P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_CATEGORY, P.PRODUCT_PRICE, P.PRODUCT_DESC, P.PRODUCT_LOC,
+					P.PRODUCT_DEL, P.PRODUCT_SALE, F.FILE_NEW_NAME
+					FROM PRODUCT p JOIN FILE_TABLE F
+					ON P.PRODUCT_NO = F.PRODUCT_NO
+					WHERE F.FILE_ORI_NAME = 'thumbnail'
+					ORDER BY P.PRODUCT_NO DESC
+					) B
+				)A
+			WHERE anum <![CDATA[ <= ]]>
+			#{pageEnd}
+			) X
+		WHERE X.rnum <![CDATA[ >= ]]>
+		#{pageBegin}
+	</select>
+	
+	<select id="categoryListPaging" parameterType="storePagingDto" resultType="productDto">
+		SELECT X.rnum,
+		X.PRODUCT_NO, X.PRODUCT_NAME,  X.PRODUCT_CATEGORY, X.PRODUCT_PRICE, X.PRODUCT_DESC, X.PRODUCT_LOC,
+		X.PRODUCT_DEL, X.PRODUCT_SALE, X.FILE_NEW_NAME
+		FROM (
+			SELECT anum AS rnum,
+			A.PRODUCT_NO, A.PRODUCT_NAME, A.PRODUCT_CATEGORY, A.PRODUCT_PRICE, A.PRODUCT_DESC, A.PRODUCT_LOC,
+			A.PRODUCT_DEL, A.PRODUCT_SALE, A.FILE_NEW_NAME
+			FROM (
+				SELECT ROWNUM as anum,
+				B.PRODUCT_NO, B.PRODUCT_NAME, B.PRODUCT_CATEGORY, B.PRODUCT_PRICE, B.PRODUCT_DESC, B.PRODUCT_LOC,
+				B.PRODUCT_DEL, B.PRODUCT_SALE, B.FILE_NEW_NAME
+				FROM (
+					SELECT P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_CATEGORY, P.PRODUCT_PRICE, P.PRODUCT_DESC, P.PRODUCT_LOC,
+					P.PRODUCT_DEL, P.PRODUCT_SALE, F.FILE_NEW_NAME
+					FROM PRODUCT p JOIN FILE_TABLE F
+					ON P.PRODUCT_NO = F.PRODUCT_NO
+					WHERE P.PRODUCT_CATEGORY = #{product_category}
+					AND F.FILE_ORI_NAME = 'thumbnail'
+					ORDER BY P.PRODUCT_NO DESC
+					) B
+				)A
+			WHERE anum <![CDATA[ <= ]]>
+			#{pageEnd}
+			) X
+		WHERE X.rnum <![CDATA[ >= ]]>
+		#{pageBegin}
+	</select>
+	
+	<select id="productList" parameterType="PagingDto" resultType="productDto">
+		SELECT X.rnum,
+		X.PRODUCT_NO, X.PRODUCT_NAME, X.PRODUCT_CATEGORY, X.PRODUCT_PRICE, X.PRODUCT_DESC, X.PRODUCT_LOC,
+		X.PRODUCT_DEL, X.PRODUCT_SALE
+		FROM (
+		SELECT ROWNUM AS rnum,
+		A.PRODUCT_NO, A.PRODUCT_NAME, A.PRODUCT_CATEGORY, A.PRODUCT_PRICE, A.PRODUCT_DESC, A.PRODUCT_LOC,
+		A.PRODUCT_DEL, A.PRODUCT_SALE
+		FROM (
+		SELECT
+		P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_CATEGORY, P.PRODUCT_PRICE, P.PRODUCT_DESC, P.PRODUCT_LOC,
+		P.PRODUCT_DEL, P.PRODUCT_SALE
+		FROM PRODUCT p
+		ORDER BY PRODUCT_NO DESC
+		) A
+		WHERE ROWNUM <![CDATA[ <= ]]>
+		#{pageEnd}
+		) X
+		WHERE X.rnum <![CDATA[ >= ]]>
+		#{pageBegin}
+	</select>
+	
+	<select id="selectListSearch" parameterType="storePagingDto" resultType="productDto">
+	SELECT X.rnum,
+		X.PRODUCT_NO, X.PRODUCT_NAME, X.PRODUCT_CATEGORY, X.PRODUCT_PRICE, X.PRODUCT_DESC, X.PRODUCT_LOC,
+		X.PRODUCT_DEL, X.PRODUCT_SALE, X.FILE_NEW_NAME
+		FROM (
+			SELECT anum AS rnum,
+			A.PRODUCT_NO, A.PRODUCT_NAME, A.PRODUCT_CATEGORY, A.PRODUCT_PRICE, A.PRODUCT_DESC, A.PRODUCT_LOC,
+			A.PRODUCT_DEL, A.PRODUCT_SALE, A.FILE_NEW_NAME
+			FROM (
+				SELECT ROWNUM as anum,
+				B.PRODUCT_NO, B.PRODUCT_NAME, B.PRODUCT_CATEGORY, B.PRODUCT_PRICE, B.PRODUCT_DESC, B.PRODUCT_LOC,
+				B.PRODUCT_DEL, B.PRODUCT_SALE, B.FILE_NEW_NAME
+				FROM (
+					SELECT P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_CATEGORY, P.PRODUCT_PRICE, P.PRODUCT_DESC, P.PRODUCT_LOC,
+					P.PRODUCT_DEL, P.PRODUCT_SALE, F.FILE_NEW_NAME
+					FROM PRODUCT p JOIN FILE_TABLE F
+					ON P.PRODUCT_NO = F.PRODUCT_NO
+					WHERE F.FILE_ORI_NAME = 'thumbnail' AND (P.PRODUCT_NAME LIKE '%'||#{search_keyword}||'%'
+					OR P.PRODUCT_DESC LIKE '%'||#{search_keyword}||'%')				
+					ORDER BY P.PRODUCT_NO DESC
+					) B
+				)A
+			WHERE anum <![CDATA[ <= ]]>
+			#{pageEnd}
+			) X
+		WHERE X.rnum <![CDATA[ >= ]]>
+		#{pageBegin}
+	</select>
+	
+	<select id="main_selectList" resultType="productDto">
+		SELECT X.PRODUCT_NO, X.PRODUCT_NAME, X.PRODUCT_PRICE, X.FILE_NEW_NAME
+		FROM(
+			SELECT ROWNUM as rnum,A.avg,A.PRODUCT_NAME, A.PRODUCT_NO, A.PRODUCT_PRICE, A.FILE_NEW_NAME
+			FROM(
+				SELECT AVG(R.REVIEW_RATE) AS avg, P.PRODUCT_NAME, P.PRODUCT_NO, P.PRODUCT_PRICE , F.FILE_NEW_NAME
+				FROM PRODUCT P, REVIEW R, FILE_TABLE F
+				WHERE P.PRODUCT_NO = R.PRODUCT_NO
+				AND F.PRODUCT_NO = P.PRODUCT_NO
+				AND F.FILE_ORI_NAME = 'thumbnail'
+				GROUP BY P.PRODUCT_NAME, P.PRODUCT_NO, P.PRODUCT_PRICE, F.FILE_NEW_NAME
+				ORDER BY avg desc
+				)A
+			WHERE ROWNUM <![CDATA[ <= ]]> 6
+			) X
+		WHERE X.rnum <![CDATA[ >= ]]> 1
+	</select>
+	
+	<select id="selectfile" resultType="productDto" parameterType="int" >
+		SELECT F.FILE_NEW_NAME
+		FROM PRODUCT P, FILE_TABLE F
+		WHERE P.PRODUCT_NO = F.PRODUCT_NO
+		AND P.PRODUCT_NO = #{product_no}
+		AND F.FILE_ORI_NAME != 'thumbnail'
+	</select>
+	
+	<select id="selectOne" parameterType="int" resultType="productDto">
+		SELECT PRODUCT_NO, PRODUCT_NAME, PRODUCT_CATEGORY, PRODUCT_PRICE, PRODUCT_DESC, PRODUCT_LOC,
+		PRODUCT_DEL, PRODUCT_SALE 
+		FROM PRODUCT 
+		WHERE PRODUCT_NO = #{product_no}
+	</select>
+	
+	<select id="selectOneByName" parameterType="String" resultType="productDto">
+		SELECT PRODUCT_NO, PRODUCT_NAME, PRODUCT_CATEGORY, PRODUCT_PRICE, PRODUCT_DESC, PRODUCT_LOC,
+		PRODUCT_DEL, PRODUCT_SALE
+		FROM PRODUCT
+		WHERE PRODUCT_NAME = #{product_name}
+	</select>
+	
+	<insert id="insert" parameterType="productDto">
+		INSERT INTO PRODUCT
+		VALUES(PRODUCT_NO_SEQ.NEXTVAL, #{product_name}, #{product_category}, #{product_price}, #{product_desc}, #{product_loc}, #{product_del},
+		null)
+		<selectKey keyProperty="product_no" resultType="int" >
+			SELECT PRODUCT_NO_SEQ.CURRVAL From DUAL
+		</selectKey>
+	</insert>
+	
+	<update id="updateSale" parameterType="productDto">
+		UPDATE PRODUCT
+		SET PRODUCT_SALE = #{product_sale}
+		WHERE PRODUCT_NO = #{product_no}
+	</update>
+	
+	<update id="update" parameterType="classDto">
+		UPDATE PRODUCT
+		SET PRODUCT_CATEGORY = #{product_category}, PRODUCT_DEL = #{product_del}, PRODUCT_NAME = #{product_name}, PRODUCT_LOC = #{product_loc},
+		PRODUCT_PRICE = #{product_price}, PRODUCT_SALE = #{product_sale}, PRODUCT_DESC = #{product_desc} 
+		WHERE PRODUCT_NO = #{product_no}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM PRODUCT 
+		WHERE PRODUCT_NO = #{product_no}
+	</delete>
+	
+	<select id="productListCount" resultType="int">
+		SELECT COUNT(PRODUCT_NO)
+		FROM PRODUCT
+	</select>
+	
+	<select id="productSearchCount" resultType="int" parameterType="storePagingDto">
+		SELECT COUNT(*) AS cnt
+		FROM PRODUCT
+		WHERE PRODUCT_NAME LIKE '%'||#{search_keyword}||'%'
+		OR PRODUCT_DESC LIKE '%'||#{search_keyword}||'%'
+	</select>
+	<select id="productcategoryCount" resultType="int" parameterType="String">
+		SELECT COUNT(*) AS cnt
+		FROM PRODUCT
+		WHERE PRODUCT_CATEGORY = #{product_category}
+	</select>
+	
+	<select id="searchedList" parameterType="String" resultType="productDto">
+		SELECT PRODUCT_NO, PRODUCT_NAME, PRODUCT_CATEGORY, PRODUCT_PRICE, PRODUCT_DESC, PRODUCT_LOC,
+		PRODUCT_DEL, PRODUCT_SALE
+		FROM PRODUCT 
+		WHERE PRODUCT_NAME LIKE '%'||#{search_keyword}||'%'
+	</select>
+</mapper>

@@ -1,0 +1,45 @@
+package com.project.one.model.biz;
+
+import java.util.List;
+
+import com.project.one.model.dto.PagingDto;
+import com.project.one.model.dto.ReviewDto;
+import com.project.one.model.dto.SearchDto;
+
+public interface ReviewBiz {
+
+	public List<ReviewDto> selectList();
+	
+	public List<ReviewDto> reviewPaging(PagingDto pDto);
+	
+	public List<ReviewDto> myReviewList(PagingDto pDto);
+	
+	public int reviewCount();
+
+	public List<SearchDto> search();
+
+	public ReviewDto selectOne(int review_no);
+
+	public int insert(ReviewDto dto);
+
+	public int update(ReviewDto dto);
+
+	public int delete(int review_no);
+
+	public double avgListByProduct(int product_no);
+	
+	public double avgListByClass(int class_no);
+	
+	public List<ReviewDto> selectClass();
+	
+	public List<ReviewDto> selectProduct();
+	
+	public int insertProduct(ReviewDto dto);
+	
+	public List<ReviewDto> listByClass(int class_no);
+	
+	public List<ReviewDto> listByProduct(int product_no);
+	
+	public int reviewMyCount(String member_id);
+	
+}

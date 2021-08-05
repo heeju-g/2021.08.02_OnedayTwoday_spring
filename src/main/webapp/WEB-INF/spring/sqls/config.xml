@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<typeAliases>
+	<typeAlias type="com.project.one.model.dto.MemberDto" alias="memberDto" />
+	<typeAlias type="com.project.one.model.dto.ClassDto" alias="classDto" />
+	<typeAlias type="com.project.one.model.dto.ProductDto" alias="productDto" />
+	<typeAlias type="com.project.one.model.dto.BoardDto" alias="boardDto" />
+	<typeAlias type="com.project.one.model.dto.FileTableDto" alias="fileTableDto" />
+	<typeAlias type="com.project.one.model.dto.PaymentDto" alias="paymentDto" />
+	<typeAlias type="com.project.one.model.dto.BasketDto" alias="basketDto" />
+	<typeAlias type="com.project.one.model.dto.EventDto" alias="eventDto" />
+	<typeAlias type="com.project.one.model.dto.ReviewDto" alias="reviewDto" />
+	<typeAlias type="com.project.one.model.dto.ChattingDto" alias="chattingDto" />
+	<typeAlias type="com.project.one.model.dto.RoomDto" alias="roomDto" />
+	<typeAlias type="com.project.one.model.dto.DetailDto" alias="detailDto" />
+	<typeAlias type="com.project.one.model.dto.PagingDto" alias="pagingDto" />
+	<typeAlias type="com.project.one.model.dto.StorePagingDto" alias="storePagingDto" />
+	<typeAlias type="com.project.one.model.dto.ChatreadDto" alias="chatreadDto" />
+	<typeAlias type="com.project.one.model.dto.SearchDto" alias="searchDto" />
+	<typeAlias type="com.project.one.model.dto.RankDto" alias="rankDto" />
+	</typeAliases>
+	
+	<!-- resources : src/main/resources와 연결됨 -->
+	<mappers>
+		<mapper resource="/mybatis/member-mapper.xml" />
+		<mapper resource="/mybatis/class-mapper.xml" />
+		<mapper resource="/mybatis/product-mapper.xml" />
+		<mapper resource="/mybatis/board-mapper.xml" />
+		<mapper resource="/mybatis/fileTable-mapper.xml" />
+		<mapper resource="/mybatis/payment-mapper.xml" />
+		<mapper resource="/mybatis/basket-mapper.xml" />
+		<mapper resource="/mybatis/event-mapper.xml" />
+		<mapper resource="/mybatis/review-mapper.xml" />
+		<mapper resource="/mybatis/chatting-mapper.xml" />
+		<mapper resource="/mybatis/room-mapper.xml" />
+		<mapper resource="/mybatis/detail-mapper.xml" />
+		<mapper resource="/mybatis/rank-mapper.xml" />
+	</mappers>
+</configuration>

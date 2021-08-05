@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="payment">
+	<select id="selectList" resultType="paymentDto">
+		SELECT PAYMENT_NO, PAYMENT_NUM, PAYMENT_PRICE, PAYMENT_DATE, PAYMENT_DEL, PAYMENT_UID, MEMBER_ID,
+		PRODUCT_NO, BASKET_GROUP, DETAIL_NO
+		FROM PAYMENT
+		ORDER BY PAYMENT_NO
+	</select>
+	
+	<select id="paymentList" parameterType="PagingDto" resultType="paymentDto">
+		SELECT X.rnum,
+		X.PAYMENT_NO, X.PAYMENT_NUM, X.PAYMENT_PRICE, X.PAYMENT_DATE, X.PAYMENT_DEL, X.PAYMENT_UID, X.MEMBER_ID,
+		X.PRODUCT_NO, X.BASKET_GROUP, X.DETAIL_NO
+		FROM (
+		SELECT ROWNUM AS rnum,
+		A.PAYMENT_NO, A.PAYMENT_NUM, A.PAYMENT_PRICE, A.PAYMENT_DATE, A.PAYMENT_DEL, A.PAYMENT_UID, A.MEMBER_ID,
+		A.PRODUCT_NO, A.BASKET_GROUP, A.DETAIL_NO
+		FROM (
+		SELECT
+		P.PAYMENT_NO, P.PAYMENT_NUM, P.PAYMENT_PRICE, P.PAYMENT_DATE, P.PAYMENT_DEL, P.PAYMENT_UID, P.MEMBER_ID,
+		P.PRODUCT_NO, P.BASKET_GROUP, P.DETAIL_NO
+		FROM PAYMENT p
+		ORDER BY PAYMENT_DATE DESC
+		) A
+		WHERE ROWNUM <![CDATA[ <= ]]>
+		#{pageEnd}
+		) X
+		WHERE X.rnum <![CDATA[ >= ]]>
+		#{pageBegin}
+	</select>
+	
+	<select id="myPaymentList" parameterType="PagingDto" resultType="paymentDto">
+		SELECT X.rnum,
+		X.PAYMENT_NO, X.PAYMENT_NUM, X.PAYMENT_PRICE, X.PAYMENT_DATE, X.PAYMENT_DEL, X.PAYMENT_UID, X.MEMBER_ID,
+		X.PRODUCT_NO, X.BASKET_GROUP, X.DETAIL_NO
+		FROM (
+		SELECT ROWNUM AS rnum,
+		A.PAYMENT_NO, A.PAYMENT_NUM, A.PAYMENT_PRICE, A.PAYMENT_DATE, A.PAYMENT_DEL, A.PAYMENT_UID, A.MEMBER_ID,
+		A.PRODUCT_NO, A.BASKET_GROUP, A.DETAIL_NO
+		FROM (
+		SELECT
+		P.PAYMENT_NO, P.PAYMENT_NUM, P.PAYMENT_PRICE, P.PAYMENT_DATE, P.PAYMENT_DEL, P.PAYMENT_UID, P.MEMBER_ID,
+		P.PRODUCT_NO, P.BASKET_GROUP, P.DETAIL_NO
+		FROM PAYMENT p
+		WHERE MEMBER_ID = #{member_id}
+		ORDER BY PAYMENT_DATE DESC
+		) A
+		WHERE ROWNUM <![CDATA[ <= ]]>
+		#{pageEnd}
+		) X
+		WHERE X.rnum <![CDATA[ >= ]]>
+		#{pageBegin}
+	</select>
+	
+	<select id="selectOne" resultType="paymentDto">
+		SELECT PAYMENT_NO, PAYMENT_NUM, PAYMENT_PRICE, PAYMENT_DATE, PAYMENT_DEL, PAYMENT_UID, MEMBER_ID,
+		PRODUCT_NO, BASKET_GROUP, DETAIL_NO
+		FROM PAYMENT
+		WHERE PAYMENT_NO = #{payment_no}
+	</select>
+	
+	<insert id="insertProduct" parameterType="paymentDto">
+		INSERT INTO PAYMENT
+		VALUES(PAYMENT_NO_SEQ.NEXTVAL, #{payment_num}, #{payment_price}, SYSDATE, #{payment_del}, #{payment_uid}, #{member_id}, #{product_no}, NULL, NULL)	
+	</insert>
+	
+	<insert id="insertClass" parameterType="paymentDto">
+		INSERT INTO PAYMENT
+		VALUES(PAYMENT_NO_SEQ.NEXTVAL, #{payment_num}, #{payment_price}, SYSDATE, #{payment_del}, #{payment_uid}, #{member_id}, NULL, NULL, #{detail_no})		
+	</insert>
+	
+	<insert id="insertBasket" parameterType="paymentDto">
+		INSERT INTO PAYMENT
+		VALUES(PAYMENT_NO_SEQ.NEXTVAL, #{payment_num}, #{payment_price}, SYSDATE, #{payment_del}, #{payment_uid}, #{member_id}, NULL, #{basket_group}, NULL)		
+	</insert>
+	
+	<update id="updateStatus" parameterType="paymentDto">
+		UPDATE PAYMENT
+
+			<choose>
+			    <when test="payment_del != null and payment_del.equals('결제완료')">
+			      set payment_del = '배송준비중'
+			    </when>
+			    
+			    <when test="payment_del != null and payment_del.equals('배송준비중')">
+			      set payment_del = '배송중'
+			    </when>
+			    
+			    <when test="payment_del != null and payment_del.equals('배송중')">
+			      set payment_del = '배송완료'
+			    </when>
+		  	</choose>
+	
+		WHERE PAYMENT_NO = #{payment_no}
+	</update>
+	
+	<delete id="delete" parameterType="paymentDto">
+		DELETE FROM PAYMENT 
+		WHERE PAYMENT_NO = #{payment_no} AND PAYMENT_UID = #{payment_uid}
+	</delete>
+	
+	<select id="checkPaid" resultType="paymentDto">
+		SELECT PAYMENT_NO, PAYMENT_NUM, PAYMENT_PRICE, PAYMENT_DATE, PAYMENT_DEL, PAYMENT_UID, MEMBER_ID, PRODUCT_NO, BASKET_GROUP, DETAIL_NO
+		FROM PAYMENT
+		WHERE PAYMENT_NO = #{payment_no} AND MEMBER_ID = #{member_id}
+	</select>
+	
+	<select id="paymentCount" resultType="int">
+		SELECT COUNT(PAYMENT_NO) AS cnt
+		FROM PAYMENT
+	</select>
+	
+	<select id="paymentMYCount" parameterType="String" resultType="int">
+		SELECT COUNT(PAYMENT_NO) AS cnt
+		FROM PAYMENT
+		WHERE MEMBER_ID = #{member_id}
+	</select>
+	
+	<select id="montlyPayment" resultType="paymentDto">
+		SELECT TO_DATE(A.day) as PAYMENT_DATE, SUM(A.PAYMENT_PRICE) as PAYMENT_PRICE
+		FROM (
+		      SELECT TO_CHAR(PAYMENT_DATE, 'yyyy-MM-DD')AS day , PAYMENT_PRICE 
+		      FROM PAYMENT
+		      )A
+		GROUP BY A.day
+	</select>
+</mapper>

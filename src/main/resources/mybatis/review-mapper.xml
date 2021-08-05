@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="review">
+	<select id="selectList" resultType="reviewDto">
+		SELECT R.REVIEW_NO, R.REVIEW_TITLE, R.REVIEW_RATE, R.REVIEW_DATE, R.REVIEW_CONTENT, R.PRODUCT_NO, R.CLASS_NO, M.MEMBER_NICNAME AS MEMBER_ID
+		FROM REVIEW R , MEMBER M 
+		WHERE R.MEMBER_ID = M.MEMBER_ID
+		ORDER BY R.REVIEW_NO
+	</select>
+	
+	<select id="selectOne" parameterType="int" resultType="reviewDto">
+		SELECT R.REVIEW_NO, R.REVIEW_TITLE, R.REVIEW_RATE, R.REVIEW_DATE, R.REVIEW_CONTENT, R.PRODUCT_NO, R.CLASS_NO, M.MEMBER_NICNAME AS MEMBER_ID
+		FROM REVIEW R , MEMBER M 
+		WHERE R.MEMBER_ID = M.MEMBER_ID
+		AND R.REVIEW_NO = #{review_no}
+	</select>
+	
+	<select id="search" resultType="searchDto">
+		SELECT X.PRODUCT_NO,X.CLASS_NO
+		FROM 
+			(
+			SELECT A.avg,A.PRODUCT_NO ,A.CLASS_NO, ROWNUM as rnum
+			FROM
+					(
+					SELECT AVG(REVIEW_RATE)as avg, PRODUCT_NO, CLASS_NO
+					FROM REVIEW 
+					WHERE PRODUCT_NO IN (
+					   		        SELECT PRODUCT_NO 
+					   		        FROM REVIEW 
+					   		        )
+					OR CLASS_NO IN (
+							SELECT CLASS_NO
+							FROM REVIEW 
+							) 
+					GROUP BY PRODUCT_NO , CLASS_NO
+					ORDER BY AVG DESC
+					) A
+			WHERE ROWNUM <![CDATA[ <= ]]> 5
+			) X	
+		WHERE rnum <![CDATA[ >= ]]> 1
+	</select>
+	
+	<select id="avgListByProduct" parameterType="int" resultType="double">
+		SELECT NVL(AVG(REVIEW_RATE),0)
+		FROM REVIEW
+		WHERE PRODUCT_NO = #{product_no}
+	</select>
+	
+	<select id="avgListByClass" parameterType="int" resultType="double">
+		SELECT NVL(AVG(REVIEW_RATE),0)
+		FROM REVIEW
+		WHERE CLASS_NO = #{class_no}
+	</select>
+	
+	<insert id="insert" parameterType="reviewDto">
+		INSERT INTO REVIEW
+		VALUES(REVIEW_NO_SEQ.NEXTVAL,#{review_title},#{review_rate},SYSDATE,#{review_content},NULL,#{class_no},#{member_id})
+		<selectKey keyProperty="review_no" resultType="int" >
+			SELECT REVIEW_NO_SEQ.CURRVAL From DUAL
+		</selectKey>
+	</insert>
+		
+	<update id="update" parameterType="reviewDto">
+		UPDATE REVIEW SET
+		REVIEW_TITLE=#{review_title},REVIEW_CONTENT=#{review_content},
+		REVIEW_DATE=SYSDATE , REVIEW_RATE= #{review_rate}
+		WHERE REVIEW_NO = #{review_no}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM REVIEW 
+		WHERE REVIEW_NO = #{review_no}
+	</delete>
+	
+
+	<insert id="insertProduct" parameterType="reviewDto">
+		INSERT INTO REVIEW
+		VALUES(REVIEW_NO_SEQ.NEXTVAL,#{review_title},#{review_rate},SYSDATE,#{review_content},#{product_no},NULL,#{member_id})
+		<selectKey keyProperty="review_no" resultType="int" >
+			SELECT REVIEW_NO_SEQ.CURRVAL From DUAL
+		</selectKey>
+	</insert>
+	
+	<select id="listByClass" resultType="reviewDto">
+		SELECT REVIEW_NO, REVIEW_TITLE, REVIEW_RATE, REVIEW_DATE, REVIEW_CONTENT, PRODUCT_NO, CLASS_NO, MEMBER_ID
+		FROM REVIEW
+		WHERE CLASS_NO = #{class_no}
+		ORDER BY REVIEW_NO DESC
+	</select>
+	
+	<select id="listByProduct" resultType="reviewDto">
+		SELECT REVIEW_NO, REVIEW_TITLE, REVIEW_RATE, REVIEW_DATE, REVIEW_CONTENT, PRODUCT_NO, CLASS_NO, MEMBER_ID
+		FROM REVIEW
+		WHERE PRODUCT_NO = #{product_no}
+		ORDER BY REVIEW_NO DESC
+	</select>
+	
+	<select id="reviewPaging" parameterType="PagingDto" resultType="reviewDto">
+		SELECT X.rnum,
+			X.REVIEW_NO, X.REVIEW_TITLE, X.REVIEW_RATE,X.REVIEW_DATE, X.REVIEW_CONTENT, X.PRODUCT_NO, X.CLASS_NO,
+			X.MEMBER_ID, X.FILE_NEW_NAME
+			FROM (
+				SELECT anum AS rnum,
+				A.REVIEW_NO, A.REVIEW_TITLE, A.REVIEW_RATE, A.REVIEW_DATE, A.REVIEW_CONTENT, A.PRODUCT_NO,
+				A.CLASS_NO, A.MEMBER_ID, A.FILE_NEW_NAME
+				FROM (
+					SELECT ROWNUM as anum,
+					B.REVIEW_NO, B.REVIEW_TITLE, B.REVIEW_RATE, B.REVIEW_DATE, B.REVIEW_CONTENT, B.PRODUCT_NO,
+					B.CLASS_NO, B.MEMBER_ID, B.FILE_NEW_NAME
+					FROM (
+						SELECT R.REVIEW_NO, R.REVIEW_TITLE, R.REVIEW_RATE, R.REVIEW_DATE, R.REVIEW_CONTENT, R.PRODUCT_NO,
+					  	R.CLASS_NO, M.MEMBER_NICNAME AS MEMBER_ID, F.FILE_NEW_NAME
+						FROM REVIEW R, FILE_TABLE F, MEMBER M
+						WHERE R.REVIEW_NO = F.REVIEW_NO
+						AND R.MEMBER_ID = M.MEMBER_ID
+						AND F.FILE_ORI_NAME = 'thumbnail'
+						ORDER BY R.REVIEW_NO DESC
+						) B
+					)A
+				WHERE anum <![CDATA[ <= ]]> #{pageEnd}
+				) X
+			WHERE X.rnum <![CDATA[ >= ]]> #{pageBegin}
+	</select>
+	
+	<select id="reviewCount"  resultType="int">
+		SELECT COUNT(REVIEW_NO)
+		FROM REVIEW
+	</select>
+	
+	<select id="myReviewList" parameterType="PagingDto" resultType="reviewDto">
+		SELECT X.rnum,
+		X.REVIEW_NO, X.REVIEW_TITLE, X.REVIEW_RATE,X.REVIEW_DATE, X.REVIEW_CONTENT, X.PRODUCT_NO, X.CLASS_NO,
+		X.MEMBER_ID, X.FILE_NEW_NAME
+		FROM (
+			SELECT anum AS rnum,
+			A.REVIEW_NO, A.REVIEW_TITLE, A.REVIEW_RATE, A.REVIEW_DATE, A.REVIEW_CONTENT, A.PRODUCT_NO,
+			A.CLASS_NO, A.MEMBER_ID, A.FILE_NEW_NAME
+			FROM (
+				SELECT ROWNUM as anum,
+				B.REVIEW_NO, B.REVIEW_TITLE, B.REVIEW_RATE, B.REVIEW_DATE, B.REVIEW_CONTENT, B.PRODUCT_NO,
+				B.CLASS_NO, B.MEMBER_ID, B.FILE_NEW_NAME
+				FROM (
+					SELECT R.REVIEW_NO, R.REVIEW_TITLE, R.REVIEW_RATE, R.REVIEW_DATE, R.REVIEW_CONTENT, R.PRODUCT_NO,
+				  	R.CLASS_NO, R.MEMBER_ID, F.FILE_NEW_NAME , ROW_NUMBER() OVER(PARTITION BY R.REVIEW_NO ORDER BY F.FILE_NUM DESC) as RowIdx
+					FROM REVIEW R JOIN FILE_TABLE F
+					ON R.REVIEW_NO = F.REVIEW_NO
+					WHERE R.MEMBER_ID = #{member_id} AND F.FILE_ORI_NAME = 'thumbnail'
+					ORDER BY R.REVIEW_NO DESC
+					) B
+				WHERE RowIdx = 1
+				)A
+			WHERE anum <![CDATA[ <= ]]>
+			#{pageEnd}
+			) X
+		WHERE X.rnum <![CDATA[ >= ]]>
+		#{pageBegin}
+	</select>
+	
+	<select id="reviewMyCount" resultType="int">
+		SELECT COUNT(REVIEW_NO)
+		FROM REVIEW
+		WHERE MEMBER_ID = #{member_id}
+	</select>
+
+</mapper>

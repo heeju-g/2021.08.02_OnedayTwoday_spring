@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+
+	<select id="selectList" resultType="memberDto">
+		SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_NICNAME, MEMBER_EMAIL, MEMBER_PHONE,
+		MEMBER_ADDR , MEMBER_IP, MEMBER_GRADE , MEMBER_JOIN , MEMBER_NOTIFY, MEMBER_FACE, MEMBER_AUTO
+		FROM MEMBER
+		WHERE MEMBER_GRADE = '일반회원' OR MEMBER_GRADE='강사회원'
+		ORDER BY MEMBER_ID
+	</select>
+	
+	<select id="memberList" parameterType="PagingDto" resultType="memberDto">
+		SELECT X.rnum,
+		X.MEMBER_ID, X.MEMBER_PW, X.MEMBER_NAME, X.MEMBER_NICNAME, X.MEMBER_EMAIL, X.MEMBER_PHONE, X.MEMBER_ADDR,
+		X.MEMBER_IP, X.MEMBER_GRADE, X.MEMBER_JOIN, X.MEMBER_NOTIFY, X.MEMBER_FACE, X.MEMBER_AUTO
+		FROM (
+		SELECT ROWNUM AS rnum,
+		A.MEMBER_ID, A.MEMBER_PW, A.MEMBER_NAME, A.MEMBER_NICNAME, A.MEMBER_EMAIL, A.MEMBER_PHONE, A.MEMBER_ADDR,
+		A.MEMBER_IP, A.MEMBER_GRADE, A.MEMBER_JOIN, A.MEMBER_NOTIFY, A.MEMBER_FACE, A.MEMBER_AUTO
+		FROM (
+		SELECT
+		M.MEMBER_ID, M.MEMBER_PW, M.MEMBER_NAME, M.MEMBER_NICNAME, M.MEMBER_EMAIL, M.MEMBER_PHONE, M.MEMBER_ADDR,
+		M.MEMBER_IP, M.MEMBER_GRADE, M.MEMBER_JOIN, M.MEMBER_NOTIFY, M.MEMBER_FACE, M.MEMBER_AUTO
+		FROM MEMBER m
+		WHERE MEMBER_GRADE = '일반회원' OR MEMBER_GRADE='강사회원'
+		ORDER BY MEMBER_NAME ASC
+		) A
+		WHERE ROWNUM <![CDATA[ <= ]]>
+		#{pageEnd}
+		) X
+		WHERE X.rnum <![CDATA[ >= ]]>
+		#{pageBegin}
+	</select>
+	
+	
+	
+	<select id="login" parameterType="memberDto" resultType="memberDto">
+		SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_NICNAME, MEMBER_EMAIL, MEMBER_PHONE,
+		MEMBER_ADDR , MEMBER_IP, MEMBER_GRADE , MEMBER_JOIN , MEMBER_NOTIFY, MEMBER_FACE, MEMBER_AUTO
+		FROM MEMBER
+		WHERE MEMBER_ID = #{member_id}
+		AND MEMBER_PW = #{member_pw}
+	</select>
+	<select id="selectOne" parameterType="String" resultType="memberDto">
+		SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_NICNAME, MEMBER_EMAIL, MEMBER_PHONE,
+		MEMBER_ADDR , MEMBER_IP, MEMBER_GRADE , MEMBER_JOIN , MEMBER_NOTIFY, MEMBER_FACE, MEMBER_AUTO
+		FROM MEMBER
+		WHERE MEMBER_ID = #{member_id}
+	</select>
+	
+	<select id="findIdPw" resultType="memberDto">
+		SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_NICNAME, MEMBER_EMAIL, MEMBER_PHONE,
+		MEMBER_ADDR , MEMBER_IP, MEMBER_GRADE , MEMBER_JOIN , MEMBER_NOTIFY, MEMBER_FACE, MEMBER_AUTO
+		FROM MEMBER
+		WHERE (MEMBER_PHONE = #{member_phone} AND MEMBER_NAME = #{member_name}) OR (MEMBER_PHONE = #{member_phone} AND MEMBER_ID = #{member_id})
+	</select>
+	
+	<insert id="insert" parameterType="memberDto">
+		INSERT INTO MEMBER
+		VALUES(#{member_id},#{member_pw},#{member_name},#{member_nicname},#{member_email},#{member_phone},#{member_addr},
+		#{member_ip},#{member_grade},#{member_join},#{member_notify},#{member_face},#{member_auto})
+	
+	</insert>
+	
+	<update id="updatePw" parameterType="memberDto">
+		UPDATE MEMBER
+		SET MEMBER_PW = #{member_pw}
+		WHERE MEMBER_ID = #{member_id} AND MEMBER_PHONE = #{member_phone}
+	</update>
+	
+	<update id="manageMember" parameterType="memberDto">
+		UPDATE MEMBER 
+		SET MEMBER_JOIN = #{member_join}		
+		WHERE MEMBER_ID = #{member_id}
+	</update>
+	
+	<update id="update" parameterType="memberDto">
+		UPDATE MEMBER
+		SET MEMBER_PW = #{member_pw}, MEMBER_NICNAME = #{member_nicname}, MEMBER_PHONE = #{member_phone}, MEMBER_EMAIL = #{member_email}, MEMBER_ADDR = #{member_addr}, MEMBER_NOTIFY = #{member_notify}, MEMBER_GRADE = #{member_grade}
+		WHERE MEMBER_ID = #{member_id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		UPDATE MEMBER 
+		SET MEMBER_JOIN = 'N' 
+		WHERE MEMBER_ID = #{member_id}
+	</delete>
+	
+	<select id="selectListConsult" parameterType="String" resultType="memberDto">
+		SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_NICNAME, MEMBER_EMAIL, MEMBER_PHONE,
+		MEMBER_ADDR , MEMBER_IP, MEMBER_GRADE , MEMBER_JOIN , MEMBER_NOTIFY, MEMBER_FACE, MEMBER_AUTO
+		FROM MEMBER
+		WHERE MEMBER_GRADE = '강사회원'
+		ORDER BY MEMBER_ID
+	</select>
+	
+	<select id="memberCount" resultType="int">
+		SELECT COUNT(member_id) AS cnt 
+		FROM MEMBER 
+		WHERE MEMBER_GRADE = '일반회원' OR MEMBER_GRADE = '강사회원'
+	</select>
+</mapper>
