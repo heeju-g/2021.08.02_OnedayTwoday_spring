@@ -7,34 +7,31 @@
 <details>
 <summary><b>전체 기능 설명 펼치기</b></summary>
 <div markdown="1"> </br>  
-   1. 로그인/회원가입 – 로그인(소셜로그인 지원) , 회원가입 및 아이디 비밀번호 찾기, 이메일 인증 기능 </br></br>    
-   2. 캘린더 - 해당 날짜의 일정 확인, 추가, 수정, 삭제하는 기능   </br></br>    
-   3. 결제 - 예약 수수료 결제 기능, 화상채팅 진료시간에 따른 결제, 업체 서비스 이용료 결제   </br></br>    
-   4. 게시판 - 병원/식당/여행/정보공유 게시판 글 작성 수정, 삭제, 댓글작성, 선택, 확인 등의 기능   </br></br>    
-   5. 예약 - 예약 페이지 리스트 구현, 문자발송, 예약기능   </br></br>    
-   6. 닮은 동물 찾기 - 머신러닝(특정 동물과 닮은 연예인 사진 이용)을 통해 실제 사용자의 웹캠 혹은 사진 업로드 시, 닮은 동물을 찾는 기능    </br></br>    
-   7. 날씨 - 원하는 지역 날씨정보 제공   </br></br>    
-   8. 지도 - 가게 및 병원 등의 위치 표기 및 거리, 이동시간 확인기능. 데이터베이스에 등록된 업체 위치 표기 및 검색기능   </br></br>    
-   9. 비속어 필터링 - 게시글에서 필터링 기능을 통해 비속어로 판단되는 단어를 특수문자로 변경   </br></br>    
-   10. 화상채팅 - 원격 진료 기능 구현   </br></br>    
+   1. 로그인/회원가입 – sns로그인, 개인정보 암호화, 회원가입, 문자인증 기능   </br></br>    
+   2. 관리자 - 회원, 상품, 클래스, 이벤트 관리 기능   </br></br>    
+   3. 결제 - 클래스, 상품 결제, 장바구니 기능   </br></br>    
+   4. 게시판 - 리뷰, 이벤트, 상품, 클래스, 공지사항 게시판   </br></br>    
+   7. 채팅 - 관리자와의 채팅, 회원/ 강사 1대1 채팅, 텍스트 음성번역, 타 언어로 번역, 채팅 저장   </br></br>    
+   8. 지도 - 클래스 위치 제공 기능   </br></br>    
+   9. 알림 - 할인정보, 로그인내역(IP)등 정보 알림 기능   </br></br>    
+   10. 검색 - 자동완성, 실시간 검색어 순위 기능   </br></br>    
    11. 챗봇 - AI 대화처리를 통해 병원 예약과 반려동물 관련 질의응답 기능   
 </div>
 </details>
 </br>
 
 ## 1. 제작 기간 & 참여 인원
-- 21.04.12 ~ 21.05.07 
-- TEAM : 6명(이장근, 박관우, 심희주, 김인겸, 한지현, 김정규)  
+- 21.06.28 ~ 21.08.01 
+- TEAM : 5명(남민혁, 곽수정, 심희주, 안재온, 김정규)  
 
 </br>
 
 ## 2. 사용 기술
 #### `Back-end`
-  - <img src="https://img.shields.io/badge/9-Java-red"/> 
+  - <img src="https://img.shields.io/badge/11-Java-red"/> 
   - <img src="https://img.shields.io/badge/Mybatis-grey"/>
-  - <img src="https://img.shields.io/badge/3.9-Python-blue"/>
   - <img src="https://img.shields.io/badge/11-Oracle-yellow"/>
-  - <img src="https://img.shields.io/badge/node.js-green"/>
+  - <img src="https://img.shields.io/badge/5.8.1-Spring-green"/>
  
 #### `Front-end`
   - <img src="https://img.shields.io/badge/Javacript-red"/>
