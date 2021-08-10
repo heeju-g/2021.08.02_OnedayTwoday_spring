@@ -1,6 +1,6 @@
 # :pushpin: OnedayTwoday
 >원데이 클래스 및 상품을 제공하는 웹사이트    
->기획안 링크 : [Click](https://www.notion.so/9e7fe502eb814e82a649b57b8a466582 "notion link")   
+>기획안 링크 : [Click](https://www.notion.so/Onedaytwoday-cadf7591883243848126075e990368ba "notion link")   
 
 ### 프로젝트 전체 기능     
 
@@ -15,7 +15,7 @@
    8. 지도 - 클래스 위치 제공 기능   </br></br>    
    9. 알림 - 할인정보, 로그인내역(IP)등 정보 알림 기능   </br></br>    
    10. 검색 - 자동완성, 실시간 검색어 순위 기능   </br></br>    
-   11. 챗봇 - AI 대화처리를 통해 병원 예약과 반려동물 관련 질의응답 기능   
+
 </div>
 </details>
 </br>
@@ -38,9 +38,22 @@
   - <img src="https://img.shields.io/badge/html/css-orange"/>
 
 </br>
+## 4. 사용 api   
+Kakao login api   
+Naver login api   
+Naver sens api   
+Google chart api   
+Channeltalk api   
+SpeechSynthesis 
+Naver papago api   
+Elastic search api   
+Kakao map api   
+카카오 알림톡 api   
+Kakao pay api
+
 
 ## 3. ERD 설계   
-![](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F3af238f9-c97e-4031-8aa2-38ddbf5ddec6%2FCopy_of_(1%EC%B0%A8_%EC%88%98%EC%A0%95)%EB%B0%98%EB%A0%A4%EB%8F%99%EB%AC%BC_%EB%8B%A4%EC%9D%B4%EC%96%B4%EB%A6%AC.png?table=block&id=a2f64a55-ca72-42f8-8561-e02bfe8a41f8&spaceId=02035cac-9dbb-4a33-9431-b4b67098f6ba&width=2840&userId=7b670629-fe67-41bb-a78d-7cbf6af5b506&cache=v2)   
+![](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8b4cf2f7-ee1b-4145-99b2-efddf1de533a%2Ffinal.png?id=64d8e210-4e19-43f1-b85c-9673b1d94ac0&table=block&spaceId=02035cac-9dbb-4a33-9431-b4b67098f6ba&width=2840&userId=7b670629-fe67-41bb-a78d-7cbf6af5b506&cache=v2)   
 </br></br>
 
 ## 4. 담당 기능   
