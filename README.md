@@ -40,17 +40,17 @@
 </br>   
 
 ## 3. 사용 api   
-Kakao login api   
-Naver login api   
-Naver sens api   
-Google chart api   
-Channeltalk api   
-SpeechSynthesis 
-Naver papago api   
-Elastic search api   
-Kakao map api   
-카카오 알림톡 api   
-Kakao pay api
+- Kakao login api   
+- Naver login api   
+- Naver sens api   
+- Google chart api   
+- Channeltalk api   
+- SpeechSynthesis    
+- Naver papago api   
+- Elastic search api   
+- Kakao map api   
+- 카카오 알림톡 api   
+- Kakao pay api
 
 
 ## 4. ERD 설계   
