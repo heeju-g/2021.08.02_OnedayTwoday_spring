@@ -37,8 +37,9 @@
   - <img src="https://img.shields.io/badge/Javacript-red"/>
   - <img src="https://img.shields.io/badge/html/css-orange"/>
 
-</br>
-## 4. 사용 api   
+</br>   
+
+## 3. 사용 api   
 Kakao login api   
 Naver login api   
 Naver sens api   
@@ -52,11 +53,11 @@ Kakao map api
 Kakao pay api
 
 
-## 3. ERD 설계   
+## 4. ERD 설계   
 ![](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8b4cf2f7-ee1b-4145-99b2-efddf1de533a%2Ffinal.png?id=64d8e210-4e19-43f1-b85c-9673b1d94ac0&table=block&spaceId=02035cac-9dbb-4a33-9431-b4b67098f6ba&width=2840&userId=7b670629-fe67-41bb-a78d-7cbf6af5b506&cache=v2)   
 </br></br>
 
-## 4. 담당 기능   
+## 5. 담당 기능   
 
 -	**병원, 여행일정 게시판**   
 1)	병원 : 데이터베이스에 등록된 병원에 화상상담을 예약할 수 있도록 구현.   
@@ -67,7 +68,7 @@ Kakao pay api
     머신러닝 기능을 활용하여 닮은 동물상을 출력해주는 기능.   
     
 </br></br>
-## 5. 트러블 슈팅
+## 6. 트러블 슈팅
 ### 5.1. 지도 api와 데이터베이스 연결
 - 지도에서 특정 버튼을 클릭할 시, 데이터베이스에 등록된 업체(병원 및 가게)들을 지도 상에 마커로 표시하여 사용자가 한 눈에 확인할 수 있도록 구현하고자 하였습니다. 해당 기능을 구현하기 위해 세 가지 질문에 관한 해결 방안을 생각해보았습니다.   
    
