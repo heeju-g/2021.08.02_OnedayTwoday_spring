@@ -31,7 +31,7 @@
   - <img src="https://img.shields.io/badge/11-Java-red"/> 
   - <img src="https://img.shields.io/badge/Mybatis-grey"/>
   - <img src="https://img.shields.io/badge/11-Oracle-yellow"/>
-  - <img src="https://img.shields.io/badge/5.8.1-Spring-green"/>
+  - <img src="https://img.shields.io/badge/5.0.7-Spring-green"/>
  
 #### `Front-end`
   - <img src="https://img.shields.io/badge/Javacript-red"/>
