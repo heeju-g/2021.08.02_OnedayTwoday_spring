@@ -1,6 +1,6 @@
 # :pushpin: OnedayTwoday
 >원데이 클래스 및 상품을 제공하는 웹사이트    
->기획안 링크 : [Click](https://www.notion.so/Onedaytwoday-cadf7591883243848126075e990368ba "notion link")   
+>기획안 링크 : [Click]("notion link")   
 
 ### 프로젝트 전체 기능     
 
